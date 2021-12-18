@@ -277,9 +277,9 @@ browserslist@^4.17.5:
     picocolors "^1.0.0"
 
 caniuse-lite@^1.0.30001286:
-  version "1.0.30001289"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001289.tgz#d62a20175c4d9e740feda12a78b7c8df7866329e"
-  integrity sha512-hV6x4IfrYViN8cJbGFVbjD7KCrhS/O7wfDgvevYRanJ/IN+hhxpTcXXqaxy3CzPNFe5rlqdimdEB/k7H0YzxHg==
+  version "1.0.30001291"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001291.tgz#08a8d2cfea0b2cf2e1d94dd795942d0daef6108c"
+  integrity sha512-roMV5V0HNGgJ88s42eE70sstqGW/gwFndosYrikHthw98N5tLnOTxFqMLQjZVRxTWFlJ4rn+MsgXrR7MDPY4jA==
 
 chalk@^2.0.0:
   version "2.4.2"
@@ -464,10 +464,10 @@ globals@^11.1.0:
   resolved "https://registry.yarnpkg.com/globals/-/globals-11.12.0.tgz#ab8795338868a0babd8525758018c2a7eb95c42e"
   integrity sha512-WOBp/EEGUiIsJSp7wcv/y6MO+lV9UoncWqxuFfm8eBwzWNgyfBd6Gz+IeKQ9jCmyhoH99g15M3T+QaVHFjizVA==
 
-halivert.css@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/halivert.css/-/halivert.css-0.2.2.tgz#a3c7bcbfec79adc765243ce65db540d07d42d519"
-  integrity sha512-NHef1GoXF8DkadwzLtyB6Tk1plhQzfi+e3C1dmwhGfKas8M7cYpx+a40eVwrLJ3QsENtrBF8NLJ+dYAb+lXdEA==
+halivert.css@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/halivert.css/-/halivert.css-0.3.0.tgz#dc8ee8f840c613e30d7cc24e3883c9c74d196fe2"
+  integrity sha512-oPRir88HCTkzfEyv1fs37NASokHTNmxCbQ1aATIpwrAwKRCJl6Diz27KY39wZS18QJHFXAAZMXvk2rNJjX4FWA==
 
 has-flag@^3.0.0:
   version "3.0.0"

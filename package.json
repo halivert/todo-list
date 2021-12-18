@@ -7,7 +7,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "halivert.css": "^0.2.2",
+    "halivert.css": "^0.3.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
