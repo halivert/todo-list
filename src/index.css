@@ -1,13 +1,69 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root {
+	--teal: hsl(190, 100%, 30%);
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.columns {
+	display: flex;
+	flex-flow: row wrap;
+	gap: 1em;
+}
+
+.column {
+	flex: 2;
+}
+
+p:not(:last-child) {
+	margin-bottom: 1em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: bold;
+	color: var(--teal);
+}
+
+.todo-list {
+	padding: 0 1em;
+	margin: 0 auto;
+	list-style: outside;
+}
+
+.todo-item {
+	display: inline-flex;
+	max-width: 100%;
+	width: 100%;
+	flex-flow: row wrap;
+	gap: 0 1em;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.item-text {
+	cursor: pointer;
+}
+
+.completed {
+	text-decoration: line-through;
+}
+
+.completed-at {
+	color: var(--accent);
+}
+
+.input {
+	grid-column: 1 / span 2;
+}
+
+.summary {
+	flex: 1;
+}
+
+@media (max-width: 768px) {
+	.columns {
+		flex-flow: column-reverse nowrap;
+	}
 }
