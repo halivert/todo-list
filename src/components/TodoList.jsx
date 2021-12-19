@@ -1,55 +1,61 @@
 import React, { useState, useRef, useEffect } from "react";
 import useDocumentListener from "@/utils/documentListener";
 import TodoItem from "@/components/TodoItem";
+import useStore from "@/hooks/useStore";
 
 export default function TodoList() {
-	const todoInput = useRef(null);
-	const todoItems = useRef([]);
-	const [setText, setSetText] = useState(null);
-	const [todos, setTodos] = useState([]);
+	const [text, setText] = useState("");
 	const [completed, setCompleted] = useState([]);
-
+	const todoInput = useRef(null);
 	const documentListener = useDocumentListener({ todoInput });
 
-	useEffect(documentListener, []);
+	const [todos, setTodos, selectedTodo] = useStore((state) => [
+		state.todos,
+		state.setTodos,
+		state.selectedTodo,
+	]);
 
-	const addNewItem = (text) => {
-		if (!text) return;
+	const saveTodos = () => localStorage.setItem("todos", JSON.stringify(todos));
+	const [addTodo, removeTodo, updateSelectedText, selectTodo] = useStore(
+		(state) => [
+			state.addTodo,
+			state.removeTodo,
+			state.updateSelectedText,
+			state.selectTodo,
+		]
+	);
 
-		const todo = {
-			id: Date.now(),
-			text: text,
-			completed: false,
-			editing: false,
-		};
+	useEffect(() => {
+		documentListener();
+		setTodos(JSON.parse(localStorage.getItem("todos")) ?? []);
+	}, []);
 
-		setTodos((items) => [todo, ...items]);
-	};
+	useEffect(() => {
+		setText(selectedTodo.text);
+		todoInput.current.focus();
+	}, [selectedTodo.id]);
 
-	const removeItem = (id) => {
-		setTodos((items) => items.filter((todo) => todo.id !== id));
-		setSetText({ fn: null, id: null, text: null });
-	};
+	useEffect(saveTodos, [todos, completed]);
+
+	const addNewItem = (text) =>
+		addTodo({ id: Date.now(), text, completed_at: null });
 
 	const onSubmit = (e) => {
 		e.preventDefault();
+		const savedText = text;
+		if (!text) return;
+		setText("");
 
-		const text = setText?.text || "";
-		todoInput.current.focus();
+		if (selectedTodo.id) {
+			if (!savedText.length) return removeTodo(selectedTodo.id);
 
-		if (setText?.fn) {
-			if (!text?.length) return removeItem(setText.id);
-			setText.fn(text);
-			return setSetText({ ...setText, text: "" });
+			updateSelectedText(savedText);
+			saveTodos();
+			return selectTodo(null);
 		}
 
-		setSetText({ ...setText, text: "" });
-		return addNewItem(text);
-	};
-
-	const editTodo = ({ setText: fn, text, id }) => {
-		setSetText({ fn, text, id });
 		todoInput.current.focus();
+		return addNewItem(savedText);
 	};
 
 	return (
@@ -60,15 +66,13 @@ export default function TodoList() {
 					<fieldset>
 						<div>
 							<input
-								className="input"
 								ref={todoInput}
-								id="todo-input"
-								type="text"
-								placeholder={setText?.fn ? "Press enter to delete" : "New item"}
-								onInput={(e) =>
-									setSetText({ ...setText, text: e.target.value })
+								className="input"
+								placeholder={
+									selectedTodo.id ? "Press enter to delete" : "New item"
 								}
-								value={setText?.text || ""}
+								onInput={(e) => setText(e.target.value)}
+								value={text || ""}
 							/>
 						</div>
 					</fieldset>
@@ -76,24 +80,12 @@ export default function TodoList() {
 
 				<ul className="todo-list">
 					{todos.map((todo) => (
-						<TodoItem
-							ref={todoItems}
-							todo={todo}
-							key={todo.id}
-							editTodo={editTodo}
-							setCompleted={setCompleted}
-						/>
+						<TodoItem todo={todo} key={todo.id} setCompleted={setCompleted} />
 					))}
 				</ul>
 			</div>
 			<div className="column summary">
 				<h2>Summary</h2>
-				<p>
-					Completed: <strong>{completed.length}</strong>
-				</p>
-				<p>
-					Not completed: <strong>{todos.length - completed.length}</strong>
-				</p>
 			</div>
 		</div>
 	);
