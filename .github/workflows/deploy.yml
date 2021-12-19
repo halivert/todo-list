@@ -8,8 +8,6 @@ on:
 jobs:
   github-pages:
     runs-on: ubuntu-latest
-    env:
-      PUBLIC_URL: "https://halivert.dev/todo-list/"
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -23,7 +21,7 @@ jobs:
       - name: Build JS files
         run: |
           yarn
-          yarn build
+          yarn build --base=https://halivert.dev/todo-list/
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.4
