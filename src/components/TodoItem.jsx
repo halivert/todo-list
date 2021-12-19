@@ -1,23 +1,25 @@
 import React, { useState } from "react";
+import useStore from "@/hooks/useStore";
 
-export default function TodoItem({ todo, editTodo, setCompleted }) {
-	const [text, setText] = useState(todo.text);
-	const [isCompleted, setIsCompleted] = useState(todo.isCompleted);
-	const [completedAt, setCompletedAt] = useState(null);
+export default function TodoItem({ todo, setCompleted }) {
+	const selectTodo = useStore((state) => state.selectTodo);
+	const [completedAt, setCompletedAt] = useState(
+		todo.completed_at ? new Date(todo.completed_at) : null
+	);
+	const isCompleted = completedAt !== null;
 
-	const toggleComplete = (evt) => {
+	const toggleComplete = () => {
 		const comp = !isCompleted;
-		todo.completed_at = new Date();
+		todo.completed_at = comp ? new Date() : null;
 
 		setCompleted((array) => {
-			const idx = array.findIndex((t) => todo.id === t.id);
-			if (comp && idx === -1) return [...array, todo];
-			if (!comp && idx !== -1) return array.filter((t) => todo.id !== t.id);
+			const i = array.findIndex((t) => todo.id === t.id);
+			if (comp && i === -1) return [...array, todo];
+			if (!comp && i !== -1) return array.filter((t) => todo.id !== t.id);
 			return array;
 		});
 
-		setCompletedAt(comp ? new Date() : null);
-		return setIsCompleted(comp);
+		return setCompletedAt(todo.completed_at);
 	};
 
 	const getCompletedAtString = (date) => {
@@ -25,9 +27,9 @@ export default function TodoItem({ todo, editTodo, setCompleted }) {
 		return `${date.toLocaleString()}`;
 	};
 
-	const startEdition = (evt) => {
+	const onContextMenu = (evt) => {
 		evt.preventDefault();
-		return editTodo({ setText, text, id: todo.id });
+		selectTodo(todo.id);
 	};
 
 	return (
@@ -36,10 +38,10 @@ export default function TodoItem({ todo, editTodo, setCompleted }) {
 				<button
 					tabIndex="0"
 					onClick={toggleComplete}
-					onContextMenu={startEdition}
+					onContextMenu={onContextMenu}
 					className={`item-text ${isCompleted && "completed"}`}
 				>
-					{text}
+					{todo.text}
 				</button>
 				<small className="completed-at">
 					{getCompletedAtString(completedAt)}
