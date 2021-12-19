@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import useDocumentListener from "@/utils/documentListener";
 import TodoItem from "@/components/TodoItem";
 
 export default function TodoList() {
@@ -7,6 +8,10 @@ export default function TodoList() {
 	const [setText, setSetText] = useState(null);
 	const [todos, setTodos] = useState([]);
 	const [completed, setCompleted] = useState([]);
+
+	const documentListener = useDocumentListener({ todoInput });
+
+	useEffect(documentListener, []);
 
 	const addNewItem = (text) => {
 		if (!text) return;

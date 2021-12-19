@@ -1,0 +1,32 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  github-pages:
+    runs-on: ubuntu-latest
+    env:
+      PUBLIC_URL: "https://halivert.dev/todo-list/"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cache node_modules
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16.3"
+          cache: "yarn"
+
+      - name: Build JS files
+        run: |
+          yarn
+          yarn build
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          branch: gh-pages
+          folder: build

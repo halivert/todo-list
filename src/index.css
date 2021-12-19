@@ -22,7 +22,6 @@ h3,
 h4,
 h5,
 h6 {
-	font-weight: bold;
 	color: var(--teal);
 }
 
@@ -40,6 +39,7 @@ h6 {
 	gap: 0 1em;
 	justify-content: space-between;
 	align-items: center;
+	margin-bottom: 0.5em;
 }
 
 .item-text {

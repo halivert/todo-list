@@ -34,7 +34,7 @@ export default function TodoItem({ todo, editTodo, setCompleted }) {
 		<li>
 			<div className="todo-item">
 				<button
-					tabindex="0"
+					tabIndex="0"
 					onClick={toggleComplete}
 					onContextMenu={startEdition}
 					className={`item-text ${isCompleted && "completed"}`}
