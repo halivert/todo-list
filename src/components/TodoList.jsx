@@ -1,18 +1,19 @@
 import React, { useState, useRef, useEffect } from "react";
-import useDocumentListener from "@/utils/documentListener";
 import TodoItem from "@/components/TodoItem";
 import useStore from "@/hooks/useStore";
+import useKeyboard from "@/hooks/useKeyboard";
 
 export default function TodoList() {
 	const [text, setText] = useState("");
 	const [completed, setCompleted] = useState([]);
 	const todoInput = useRef(null);
-	const documentListener = useDocumentListener({ todoInput });
+	const todoRefs = useRef([]);
 
-	const [todos, setTodos, selectedTodo] = useStore((state) => [
+	const [todos, setTodos, selectedTodo, deletedTodo] = useStore((state) => [
 		state.todos,
 		state.setTodos,
 		state.selectedTodo,
+		state.deletedTodo,
 	]);
 
 	const saveTodos = () => localStorage.setItem("todos", JSON.stringify(todos));
@@ -25,9 +26,18 @@ export default function TodoList() {
 		]
 	);
 
+	const [registerKeyboardBindings, removeKeyboardBindings] = useKeyboard({
+		input: todoInput,
+		todoRefs: todoRefs,
+	});
+
 	useEffect(() => {
-		documentListener();
-		setTodos(JSON.parse(localStorage.getItem("todos")) ?? []);
+		setTodos(
+			(JSON.parse(localStorage.getItem("todos")) ?? []).filter((t) => t.id)
+		);
+		registerKeyboardBindings();
+
+		return () => removeKeyboardBindings();
 	}, []);
 
 	useEffect(() => {
@@ -43,17 +53,19 @@ export default function TodoList() {
 	const onSubmit = (e) => {
 		e.preventDefault();
 		const savedText = text;
-		if (!text) return;
 		setText("");
 
 		if (selectedTodo.id) {
-			if (!savedText.length) return removeTodo(selectedTodo.id);
-
-			updateSelectedText(savedText);
-			saveTodos();
+			if (!savedText.length) {
+				removeTodo(selectedTodo.id);
+			} else {
+				updateSelectedText(savedText);
+				saveTodos();
+			}
 			return selectTodo(null);
 		}
 
+		if (!savedText) return;
 		todoInput.current.focus();
 		return addNewItem(savedText);
 	};
@@ -79,13 +91,24 @@ export default function TodoList() {
 				</form>
 
 				<ul className="todo-list">
-					{todos.map((todo) => (
-						<TodoItem todo={todo} key={todo.id} setCompleted={setCompleted} />
+					{todos.map((todo, i) => (
+						<TodoItem
+							ref={(ref) => todoRefs.current[i] = ref}
+							todo={todo}
+							key={todo.id}
+							setCompleted={setCompleted}
+						/>
 					))}
 				</ul>
 			</div>
 			<div className="column summary">
 				<h2>Summary</h2>
+				<p>
+					Completed: <strong>{completed.length}</strong>
+				</p>
+				<p>
+					Not completed: <strong>{todos.length - completed.length}</strong>
+				</p>
 			</div>
 		</div>
 	);
