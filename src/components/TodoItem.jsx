@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, forwardRef } from "react";
 import useStore from "@/hooks/useStore";
 
-export default function TodoItem({ todo, setCompleted }) {
+export default forwardRef(({ todo, setCompleted }, ref) => {
 	const selectTodo = useStore((state) => state.selectTodo);
 	const [completedAt, setCompletedAt] = useState(
 		todo.completed_at ? new Date(todo.completed_at) : null
@@ -36,7 +36,9 @@ export default function TodoItem({ todo, setCompleted }) {
 		<li>
 			<div className="todo-item">
 				<button
+					ref={ref}
 					tabIndex="0"
+					data-id={todo.id}
 					onClick={toggleComplete}
 					onContextMenu={onContextMenu}
 					className={`item-text ${isCompleted && "completed"}`}
@@ -49,4 +51,4 @@ export default function TodoItem({ todo, setCompleted }) {
 			</div>
 		</li>
 	);
-}
+});
