@@ -32,9 +32,14 @@ export default function TodoList() {
 	});
 
 	useEffect(() => {
-		setTodos(
-			(JSON.parse(localStorage.getItem("todos")) ?? []).filter((t) => t.id)
+		const todos = (JSON.parse(localStorage.getItem("todos")) ?? []).filter(
+			(t) => t.id
 		);
+
+		setTodos(todos);
+
+		setCompleted(todos.filter((t) => t.completed_at));
+
 		registerKeyboardBindings();
 
 		return () => removeKeyboardBindings();
@@ -93,7 +98,7 @@ export default function TodoList() {
 				<ul className="todo-list">
 					{todos.map((todo, i) => (
 						<TodoItem
-							ref={(ref) => todoRefs.current[i] = ref}
+							ref={(ref) => (todoRefs.current[i] = ref)}
 							todo={todo}
 							key={todo.id}
 							setCompleted={setCompleted}
